@@ -1,0 +1,11 @@
+firstname,lastname,email,phone,mobilephone,company,jobtitle,website,country,lifecyclestage
+John,Smith,john.smith@example.com,+1-212-555-0101,+1-917-555-0101,TechNova,Software Engineer,https://technova.com,United States,lead
+Emily,Johnson,emily.johnson@example.com,+1-415-555-0102,+1-628-555-0102,CloudWorks,Marketing Manager,https://cloudworks.io,United States,marketingqualifiedlead
+Michael,Brown,michael.brown@example.com,+44-20-7946-0103,+44-7700-900103,DataSphere,Data Scientist,https://datasphere.co.uk,United Kingdom,salesqualifiedlead
+Sarah,Davis,sarah.davis@example.com,+61-2-5550-0104,+61-400-555-104,InnovateAI,AI Engineer,https://innovateai.com.au,Australia,opportunity
+David,Wilson,david.wilson@example.com,+65-6123-0105,+65-8123-0105,FinTech Solutions,Product Manager,https://fintech.sg,Singapore,customer
+Lisa,Anderson,lisa.anderson@example.com,+84-28-5550-0106,+84-912-555-106,VietTech,HR Manager,https://viettech.vn,Vietnam,lead
+James,Taylor,james.taylor@example.com,+49-30-5550-0107,+49-151-5550107,NextGen Systems,CTO,https://nextgen.de,Germany,customer
+Olivia,Martinez,olivia.martinez@example.com,+1-305-555-0108,+1-786-555-0108,DigitalEdge,Sales Executive,https://digitaledge.com,United States,lead
+Robert,Thomas,robert.thomas@example.com,+33-1-5555-0109,+33-6-5555-0109,SmartLogistics,Operations Director,https://smartlogistics.fr,France,evangelist
+Sophia,White,sophia.white@example.com,+84-28-5550-0110,+84-903-555-110,AI Solutions,Data Analyst,https://aisolutions.vn,Vietnam,other
