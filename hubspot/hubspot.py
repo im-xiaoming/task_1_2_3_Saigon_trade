@@ -50,10 +50,22 @@ class HubSpot:
             timeout=300
         )
         if not response.ok:
-            logger.error(f"Fetch email {email} error {response.status_code}")
+            logger.error(f"No email {email} found.")
 
         return response
 
+    def get_contact_by_phone(self, phone: str) -> requests.Response:
+        endpoint = f'https://api.hubapi.com/crm/v3/objects/contacts/{phone}'
+        response = requests.get(
+            url=endpoint,
+            headers=self.headers,
+            params={'idProperty': 'phone'},
+            timeout=300
+        )
+        if not response.ok:
+            logger.error(f"No phone {phone} found.")
+
+        return response
 
     def create_contact(self, contact: dict) -> requests.Response:
         endpoint = 'https://api.hubapi.com/crm/v3/objects/contacts'
@@ -80,11 +92,14 @@ class HubSpot:
 
     def get_all_contacts(self):
         endpoint = 'https://api.hubapi.com/crm/v3/objects/contacts'
+        properties = ['id', 'firstname', 'lastname', 'email', 'phone', 'mobilephone',
+                      'company', 'jobtitle', 'website', 'country', 'lifecyclestage']
         response = requests.get(
             url=endpoint,
-            headers=self.headers
+            headers=self.headers,
+            params={'properties': ','.join(properties)}
         )
         if not response.ok:
             logger.error(f"HubSpot error {response.status_code}: {response.json()}")
-            
+
         return response
