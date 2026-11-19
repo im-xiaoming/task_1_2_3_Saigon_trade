@@ -2,51 +2,56 @@ from __future__ import annotations
 
 import os
 import requests
+import logging
 from dotenv import load_dotenv
 
 from hubspot import HubSpot
 from sheets import Sheet
+from helper import load_data, to_dict
+import argparse
 
 load_dotenv()
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
-def load_data(path: str):
-    import pandas as pd
+logger = logging.getLogger(__name__)
 
-    df = pd.read_csv(path)
+def main():
+    parser = argparse.ArgumentParser(description="HubSpot Contact Management")
+    parser.add_argument('--csv', type=str, default='./data/contacts_data.csv', help='Path to the CSV file containing contact data')
 
-    data = []
-    for _, row in df.iterrows():
-        data.append(row.to_dict())
+    args = parser.parse_args()
 
-    return data
+    contacts: list[dict] = load_data(args.csv)
+    hubspot = HubSpot(
+        api_key=os.getenv('HUBSPOT_TOKEN')
+    )
+
+    # =================== create/update/remove duplicate contacts =============================
+    # for contact in contacts:
+    #     response = hubspot.get_contact_by_email(email=contact['email'])
+    #     if response.ok:
+    #         hubspot.update_contact(response.json()['id'], contact)
+    #     else:
+    #         response = hubspot.create_contact(contact)
+
+    # ================ to sheet ===================================
+    response = hubspot.get_all_contacts()
+    contacts = response.json()['results']
+
+
+    sheet = Sheet(sheet_tag='Contacts')
+    results = []
+    for contact in contacts:
+        r = {}
+        to_dict(contacts[0], r)
+        results.append(list(r.values()))
+    sheet.append_rows(results)
+
+
 
 if __name__ == '__main__':
-    path = './data/contacts_data.csv'
-    data = load_data(path)
-
-    fields = list(data[0].keys())
-    hubspot = HubSpot(
-        fiels=fields,
-        api_key=os.getenv("HUBSPOT_TOKEN")
-    )
-    sheet = Sheet(sheet_tag='Contacts')
-
-    # uncomment the following lines to create contacts in HubSpot from the CSV data
-    # for contact in data:
-    #     hubspot.create_contact(contact)
-    #     print(f"Created {contact['email']}")
-
-
-    # uncomment the following lines to fetch contacts from HubSpot and print them
-    # contacts = hubspot.get_contacts(limit=100)
-    # for contact in contacts:
-    #     print(contact)
-
-    # uncomment the following lines to fetch contacts from HubSpot and append them to a Google Sheet
-    # sheet.append_rows([list(contact.values()) for contact in contacts])
-
-    # uncomment the following lines to fetch all records from the Google Sheet and print them
-    # sheet_data = sheet.get_all_records()
-    # for row in sheet_data:
-    #     print(row)
+    main()
