@@ -6,6 +6,7 @@ import logging
 from dotenv import load_dotenv
 
 from hubspot import HubSpot
+from hub_types import Contact
 from sheets import Sheet
 from helper import load_data, to_dict
 import argparse
@@ -14,10 +15,41 @@ load_dotenv()
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(levelname)s %(filename)s - %(message)s'
 )
 
 logger = logging.getLogger(__name__)
+
+
+def post_to_hub(contacts: list[dict], hubspot: HubSpot):
+    for contact in contacts:
+        c = Contact(**contact).model_dump()
+        try:
+            e_response = hubspot.get_contact_by_email(email=c['email'])
+            p_response = hubspot.get_contact_by_phone(phone=c['phone'])
+
+            if e_response.ok:
+                response = hubspot.update_contact(e_response.json()['id'], c)
+                logger.info(f"Update contact {e_response.json()['id']}")
+            elif p_response.ok:
+                response = hubspot.update_contact(p_response.json()['id'], c)
+                logger.info(f"Update contact {p_response.json()['id']}")
+            else:
+                response = hubspot.create_contact(c)
+                logger.info(f"Create contact {response.json()['id']}")
+
+        except Exception as e:
+            logger.exception(str(e))
+
+
+def post_to_sheet(contacts: list[dict], sheet: Sheet, tag: str):
+    results = []
+    for contact in contacts:
+        r = to_dict(contact)
+        c = Contact(**r)
+        results.append(list(c.model_dump().values()))
+    sheet.append_rows(results)
+
 
 def main():
     parser = argparse.ArgumentParser(description="HubSpot Contact Management")
@@ -29,27 +61,18 @@ def main():
     hubspot = HubSpot(
         api_key=os.getenv('HUBSPOT_TOKEN')
     )
-
-    # =================== create/update/remove duplicate contacts =============================
-    # for contact in contacts:
-    #     response = hubspot.get_contact_by_email(email=contact['email'])
-    #     if response.ok:
-    #         hubspot.update_contact(response.json()['id'], contact)
-    #     else:
-    #         response = hubspot.create_contact(contact)
-
-    # ================ to sheet ===================================
-    response = hubspot.get_all_contacts()
-    contacts = response.json()['results']
-
-
     sheet = Sheet(sheet_tag='Contacts')
-    results = []
-    for contact in contacts:
-        r = {}
-        to_dict(contacts[0], r)
-        results.append(list(r.values()))
-    sheet.append_rows(results)
+
+    ########################################
+    post_to_hub(contacts, hubspot)
+
+    # response = hubspot.get_all_contacts()
+    # contacts = response.json()['results']
+    # post_to_sheet(contacts, sheet, tag='Contact')
+
+
+    # contacts = sheet.get_all_records()
+    # post_to_hub(contacts, hubspot)
 
 
 

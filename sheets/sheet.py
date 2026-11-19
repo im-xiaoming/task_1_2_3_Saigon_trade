@@ -17,6 +17,13 @@ class Sheet:
             os.getenv("WORKSHEET_NAME", sheet_tag)
         )
 
+        self.headers = ['id', 'firstname', 'lastname', 'email', 'phone', 'mobilephone',
+                        'company', 'jobtitle', 'website', 'country', 'lifecyclestage']
+        self.worksheet.update(
+            range_name="A1",
+            values=[self.headers]
+        )
+
     def append_row(self, row: list[str]):
         self.worksheet.append_row(row)
 
@@ -24,4 +31,7 @@ class Sheet:
         self.worksheet.append_rows(rows)
 
     def get_all_records(self):
-        return self.worksheet.get_all_records()
+        try:
+            return self.worksheet.get_all_records()
+        except Exception as e:
+            print(e)

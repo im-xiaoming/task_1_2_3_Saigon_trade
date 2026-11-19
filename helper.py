@@ -11,9 +11,13 @@ def load_data(path: str):
 
     return data
 
-def to_dict(data: dict, r: dict):
-    for key, value in data.items():
-        if isinstance(value, dict):
-            to_dict(data=value, r=r)
-        else:
-            r[key] = value
+def to_dict(data: dict):
+    r = {}
+    def _to_dict(data: dict, r: dict):
+        for key, value in data.items():
+            if isinstance(value, dict):
+                to_dict(data=value, r=r)
+            else:
+                r[key] = value
+    _to_dict(data, r)
+    return r
