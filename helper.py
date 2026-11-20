@@ -16,7 +16,7 @@ def to_dict(data: dict):
     def _to_dict(data: dict, r: dict):
         for key, value in data.items():
             if isinstance(value, dict):
-                to_dict(data=value, r=r)
+                _to_dict(data=value, r=r)
             else:
                 r[key] = value
     _to_dict(data, r)

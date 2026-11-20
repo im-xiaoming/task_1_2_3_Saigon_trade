@@ -20,15 +20,15 @@ class Contact(BaseModel):
 
 
 class DealData(BaseModel):
-    model_config = ConfigDict(extra='ignore')
+    model_config = ConfigDict(extra='ignore', coerce_numbers_to_str=True)
 
-    id: int
+    id: str
+    hubspot_owner_id: str | None = None
     amount: int
     dealname: str
     pipeline: str
     dealstage: str
-    owner: str
-    create_date: str
+    createdate: datetime
     closedate: datetime
     hs_lastmodifieddate: datetime
 

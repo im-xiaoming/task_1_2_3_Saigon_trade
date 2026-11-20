@@ -3,6 +3,7 @@ from __future__ import annotations
 import requests
 
 import logging
+from hub_types import DealData
 
 logger = logging.getLogger(__name__)
 
@@ -24,14 +25,59 @@ class Deal:
             logger.error("list deal failed.")
         return response
 
-    def create(self):
+    def get_valid_owner_ids(self) -> requests.Response:
+        endpoint = 'https://api.hubapi.com/crm/v3/owners/'
+        response = requests.get(
+            url=endpoint,
+            headers=self.headers
+        )
+        return response
+
+    def create(self, deal: dict):
         endpoint = 'https://api.hubapi.com/crm/v3/objects/0-3'
+        deal = DealData(**deal).model_dump(mode='json')
+        if 'id' in deal:
+            del deal['id']
+        payload = {
+            'properties': {
+                **deal
+            }
+        }
+        response = requests.post(
+            url=endpoint,
+            json=payload,
+            headers=self.headers
+        )
 
-if __name__ == '__main__':
-    dealer = Deal()
+        if not response.ok:
+            logger.error("Cannot create deal.")
+        return response
 
-    res = dealer.list_deals()
-    print(res.json())
+    def get_deal_by_id(self, id: str) -> requests.Response:
+        endpoint = f'https://api.hubapi.com/crm/v3/objects/0-3/{id}'
+        response = requests.get(
+            url=endpoint,
+            headers=self.headers
+        )
+        if not response.ok:
+            logger.error(f"Cannot fetch deal ID {id} - staus: {response.status_code}")
+        return response
 
+    def update(self, id: str, deal: dict) -> requests.Response:
+        endpoint = f'https://api.hubapi.com/crm/v3/objects/0-3/{id}'
+        if 'hubspot_owner_id' in deal:
+            del deal['hubspot_owner_id']
+        payload = {
+            'properties': {
+                **deal
+            }
+        }
+        response = requests.patch(
+            url=endpoint,
+            headers=self.headers,
+            json=payload
+        )
+        if not response.ok:
+            logger.error(f"Cannot create deal ID {id}.")
 
-# {'results': [{'id': '372471867097', 'properties': {'amount': '25000', 'closedate': None, 'createdate': '2026-11-19T08:51:58.455Z', 'dealname': 'PC', 'dealstage': 'appointmentscheduled', 'hs_lastmodifieddate': '2026-11-19T08:51:59.068Z', 'hs_object_id': '372471867097', 'pipeline': 'default'}, 'createdAt': '2026-11-19T08:51:58.455Z', 'updatedAt': '2026-11-19T08:51:59.068Z', 'archived': False, 'url': 'https://app-na2.hubspot.com/contacts/248029724/record/0-3/372471867097'}]}
+        return response

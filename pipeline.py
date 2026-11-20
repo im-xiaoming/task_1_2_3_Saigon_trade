@@ -6,7 +6,9 @@ import logging
 from dotenv import load_dotenv
 
 from hubspot import HubSpot
-from hub_types import Contact
+from hub_types import Contact, DealData
+from hubspot.deal import Deal
+from sheets.sheet import DealSheet
 from sheets import Sheet
 from helper import load_data, to_dict
 import argparse
@@ -45,10 +47,29 @@ def post_to_hub(contacts: list[dict], hubspot: HubSpot):
 def post_to_sheet(contacts: list[dict], sheet: Sheet, tag: str):
     results = []
     for contact in contacts:
-        r = to_dict(contact)
-        c = Contact(**r)
+        c = Contact(**to_dict(contact))
         results.append(list(c.model_dump().values()))
     sheet.append_rows(results)
+
+
+
+def post_deals(deals: list[dict], dealer: Deal):
+    for deal in deals:
+        if dealer.get_deal_by_id(deal['id']).ok:
+            response = update_deal(id=deal['id'], deal=deal, dealer=dealer)
+        else:
+            response = dealer.create(deal)
+
+
+def post_deal_to_sheet(deals: list[dict], sheet: DealSheet):
+    rows = [list(to_dict(deal).values()) for deal in deals]
+    sheet.append_rows(rows)
+
+
+def update_deal(id: str, deal: dict,  dealer: Deal):
+    deal = DealData(**deal).model_dump(mode='json')
+    response = dealer.update(id=str(id), deal=deal)
+    return response
 
 
 def main():
@@ -57,14 +78,14 @@ def main():
 
     args = parser.parse_args()
 
-    contacts: list[dict] = load_data(args.csv)
-    hubspot = HubSpot(
-        api_key=os.getenv('HUBSPOT_TOKEN')
-    )
-    sheet = Sheet(sheet_tag='Contacts')
+    # contacts: list[dict] = load_data(args.csv)
+    # hubspot = HubSpot(
+    #     api_key=os.getenv('HUBSPOT_TOKEN')
+    # )
+    # sheet = Sheet(sheet_tag='Contacts')
 
     ########################################
-    post_to_hub(contacts, hubspot)
+    # post_to_hub(contacts, hubspot)
 
     # response = hubspot.get_all_contacts()
     # contacts = response.json()['results']
@@ -74,6 +95,14 @@ def main():
     # contacts = sheet.get_all_records()
     # post_to_hub(contacts, hubspot)
 
+    ############################# Deal ###################################
+    dealer = Deal(
+        api_key=os.getenv('HUBSPOT_TOKEN')
+    )
+    deal_sheet = DealSheet(sheet_tag='Deal')
+
+    deals = deal_sheet.get_all_records()
+    post_deals(deals, dealer=dealer)
 
 
 if __name__ == '__main__':

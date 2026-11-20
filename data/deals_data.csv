@@ -1,0 +1,21 @@
+id,amount,dealname,pipeline,dealstage,hubspot_owner_id,createdate,closedate,hs_lastmodifieddate
+1,25000,TechNova - Laptop Fleet Upgrade,default,appointmentscheduled,104228628,2026-09-02T09:15:00Z,2026-12-15T17:00:00Z,2026-11-10T08:20:00Z
+2,48000,CloudWorks - Annual SaaS License,default,qualifiedtobuy,104228628,2026-09-05T10:30:00Z,2026-12-20T17:00:00Z,2026-11-12T14:05:00Z
+3,120000,DataSphere - Analytics Platform,default,presentationscheduled,104228628,2026-08-18T13:45:00Z,2027-01-31T17:00:00Z,2026-11-14T09:40:00Z
+4,15500,TechNova - Support Renewal,default,closedwon,104228628,2026-07-01T08:00:00Z,2026-08-15T17:00:00Z,2026-08-15T16:30:00Z
+5,72000,CloudWorks - Cloud Migration,default,decisionmakerboughtin,104228628,2026-08-25T11:10:00Z,2026-12-10T17:00:00Z,2026-11-16T10:15:00Z
+6,9800,DataSphere - Training Workshop,default,closedlost,104228628,2026-06-12T09:00:00Z,2026-07-30T17:00:00Z,2026-07-30T15:45:00Z
+7,33000,TechNova - Network Security Audit,default,contractsent,104228628,2026-09-20T14:20:00Z,2026-11-30T17:00:00Z,2026-11-18T11:00:00Z
+8,56000,CloudWorks - Data Backup Solution,default,qualifiedtobuy,104228628,2026-10-01T08:45:00Z,2027-01-15T17:00:00Z,2026-11-05T13:25:00Z
+9,210000,DataSphere - Enterprise AI Suite,default,appointmentscheduled,104228628,2026-10-08T10:00:00Z,2027-03-31T17:00:00Z,2026-11-08T09:10:00Z
+10,18750,TechNova - Office Printers,default,closedwon,104228628,2026-05-14T09:30:00Z,2026-06-20T17:00:00Z,2026-06-20T14:00:00Z
+11,41000,CloudWorks - CRM Integration,default,presentationscheduled,104228628,2026-09-28T15:00:00Z,2026-12-31T17:00:00Z,2026-11-17T16:40:00Z
+12,27500,DataSphere - Dashboard Build,default,contractsent,104228628,2026-09-15T12:00:00Z,2026-11-28T17:00:00Z,2026-11-19T08:55:00Z
+13,64000,TechNova - Server Hardware,default,decisionmakerboughtin,104228628,2026-08-30T10:20:00Z,2026-12-05T17:00:00Z,2026-11-13T12:30:00Z
+14,12000,CloudWorks - Email Marketing Add-on,default,closedlost,104228628,2026-06-03T11:00:00Z,2026-07-10T17:00:00Z,2026-07-10T10:20:00Z
+15,95000,DataSphere - Data Warehouse Setup,default,qualifiedtobuy,104228628,2026-10-12T09:40:00Z,2027-02-28T17:00:00Z,2026-11-15T15:05:00Z
+16,22000,TechNova - Software Licenses,default,closedwon,104228628,2026-04-22T08:30:00Z,2026-05-30T17:00:00Z,2026-05-30T13:15:00Z
+17,38500,CloudWorks - Security Compliance Pack,default,appointmentscheduled,104228628,2026-10-20T13:00:00Z,2027-01-20T17:00:00Z,2026-11-11T09:50:00Z
+18,150000,DataSphere - Multi-year Consulting,default,contractsent,104228628,2026-09-09T10:10:00Z,2026-12-01T17:00:00Z,2026-11-19T10:30:00Z
+19,8500,TechNova - Accessories Bundle,default,closedwon,104228628,2026-03-11T14:00:00Z,2026-04-05T17:00:00Z,2026-04-05T11:45:00Z
+20,52000,CloudWorks - Managed IT Services,default,presentationscheduled,104228628,2026-10-25T09:00:00Z,2027-01-10T17:00:00Z,2026-11-18T14:20:00Z
